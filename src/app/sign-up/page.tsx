@@ -45,15 +45,9 @@ const SignUpPage = () => {
             },
             {
                 onRequest: () => setLoading(true),
-                // onSuccess: () => {
-                //     setLoading(false);
-                //     toast.success("অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে");
-                //     router.push("/");
-                //     router.refresh(); // Crucial to force Navbar to re-evaluate useSession()
-                // },
                 onSuccess: async () => {
                     setLoading(false);
-                    toast.success("সফল হয়েছে");
+                    toast.success("অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে");
 
                     // 1. Force Better Auth to re-query the session endpoint and update client state
                     await authClient.getSession();
