@@ -1,3 +1,4 @@
+import AllProducts from "@/components/AllProducts";
 import HeroBanner from "@/components/HeroBanner";
 import PriceDecreasedToday from "@/components/PriceDecreasedToday";
 import PriceIncreasedToday from "@/components/PriceIncreasedToday";
@@ -10,8 +11,11 @@ const App = () => {
             <Suspense fallback="price increasing and ">
                 <PriceIncreasedToday></PriceIncreasedToday>
             </Suspense>
-            <Suspense fallback="price decreasing">
+            <Suspense fallback="price decreasing and ">
                 <PriceDecreasedToday></PriceDecreasedToday>
+            </Suspense>
+            <Suspense fallback="al product loading">
+                <AllProducts></AllProducts>
             </Suspense>
         </div>
     );
