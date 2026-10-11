@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { Suspense } from "react";
 import Footer from "@/components/Footer";
+import { ToastContainer } from "react-toastify";
 
 export const metadata: Metadata = {
     title: "Create Next App",
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                 </Suspense>
                 {children}
                 <Footer></Footer>
+                <ToastContainer position="bottom-center" autoClose={3000} />
             </body>
         </html>
     );

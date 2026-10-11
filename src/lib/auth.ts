@@ -1,9 +1,13 @@
 import { betterAuth } from "better-auth";
+import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { MongoClient } from "mongodb";
-import { mongodbAdapter } from "@better-auth/mongo-adapter";
 
-const client = new MongoClient("mongodb://localhost:27017/database");
-const db = client.db();
+if (!process.env.MONGODB_CONNECTION_STRING) {
+	throw new Error("MONGODB_CONNECTION_STRING is missing in .env.local");
+}
+
+const client = new MongoClient(process.env.MONGODB_CONNECTION_STRING);
+const db = client.db(); // Uses the default database name specified in your connection string
 
 export const auth = betterAuth({
 	database: mongodbAdapter(db, {
@@ -12,4 +16,6 @@ export const auth = betterAuth({
 	emailAndPassword: {
 		enabled: true,
 	},
+	secret: process.env.BETTER_AUTH_SECRET,
+	baseURL: process.env.BETTER_AUTH_URL,
 });
