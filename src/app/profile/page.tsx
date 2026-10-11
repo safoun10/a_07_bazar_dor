@@ -54,7 +54,7 @@ const ProfilePage = () => {
                         <div className="avatar placeholder">
                             <div className="bg-neutral text-neutral-content rounded-full w-16 h-16 flex items-center justify-center text-lg font-semibold relative overflow-hidden shadow-sm">
                                 <Image
-                                    src={session.user.image || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"}
+                                    src={session.user.image || "https://i.postimg.cc/FF8YZm4X/Whats-App-Image-2026-07-25-at-4-15-46-PM.jpg"}
                                     alt={session.user.name || "User Avatar"}
                                     width={64}
                                     height={64}
@@ -64,7 +64,7 @@ const ProfilePage = () => {
                         </div>
                         <div>
                             <h2 className="text-lg font-bold text-base-content">{session.user.name}</h2>
-                            <p className="text-xs sm:text-sm text-base-content/60 truncate max-w-[220px] sm:max-w-xs">
+                            <p className="text-xs sm:text-sm text-base-content/60 truncate max-w-55 sm:max-w-xs">
                                 {session.user.email}
                             </p>
                         </div>
