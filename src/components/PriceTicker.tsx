@@ -14,7 +14,7 @@ const PriceTicker = () => {
     if (products.length === 0) return null;
 
     return (
-        <div className="py-2.5 overflow-hidden">
+        <div className="py-2.5 overflow-hidden bg-white">
             <Marquee speed={150} pauseOnHover={true} gradient={false}>
                 <div className="flex items-center gap-4">
                     {products.map((item) => {

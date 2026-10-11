@@ -13,7 +13,7 @@ const fetchCategories = async (): Promise<Category[]> => {
 const categoriesPromise = fetchCategories();
 
 const Navbar = () => {
-    const isAuthenticated = true;
+    const isAuthenticated = false;
 
     return (
         <>
@@ -62,7 +62,7 @@ const Navbar = () => {
 
                                 <div
                                     tabIndex={0}
-                                    className="dropdown-content mt-2 w-56 !bg-base-100 rounded-box shadow-xl border border-base-200 p-2 z-[100]"
+                                    className="dropdown-content mt-2 w-56 bg-base-100 rounded-box shadow-xl border border-base-200 p-2 z-100"
                                 >
                                     <div className="px-3 py-2 border-b border-base-100 mb-1">
                                         <p className="text-sm font-semibold text-base-content">রেজওয়ান আহমেদ</p>
@@ -83,12 +83,12 @@ const Navbar = () => {
                             </div>
                         ) : (
                             <div className="flex items-center gap-2 md:gap-3">
-                                <Link href="/signin" className="btn btn-ghost btn-sm font-bold text-xs md:text-sm px-3 md:px-6 py-2 h-auto min-h-0">
+                                <Link href="/sign-in" className="btn btn-ghost btn-sm font-bold text-xs md:text-sm px-3 md:px-6 py-2 h-auto min-h-0">
                                     সাইন ইন
                                 </Link>
                                 <Link
-                                    href="/signup"
-                                    className="btn btn-success btn-sm text-success-content font-bold text-xs md:text-sm px-3 md:px-6 py-2 h-auto min-h-0"
+                                    href="/sign-up"
+                                    className="btn btn-success btn-sm text-white font-bold text-xs md:text-sm px-3 md:px-6 py-2 h-auto min-h-0"
                                 >
                                     সাইন আপ
                                 </Link>
