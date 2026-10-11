@@ -15,7 +15,7 @@ const PriceTicker = () => {
 
     return (
         <div className="py-2.5 overflow-hidden">
-            <Marquee speed={200} pauseOnHover={true} gradient={false}>
+            <Marquee speed={150} pauseOnHover={true} gradient={false}>
                 <div className="flex items-center gap-4">
                     {products.map((item) => {
                         const isUp = item.change.dir === "up";

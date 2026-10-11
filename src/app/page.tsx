@@ -1,8 +1,9 @@
+import HeroBanner from "@/components/HeroBanner";
 
 const App = () => {
     return (
         <div>
-            <div>test</div>
+            <HeroBanner></HeroBanner>
         </div>
     );
 };

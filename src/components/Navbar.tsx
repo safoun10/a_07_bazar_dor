@@ -1,21 +1,22 @@
 import Link from "next/link";
 import { Category } from "@/types/bazar";
 import PriceTicker from "./PriceTicker";
+import CategoryNav from "./CategoryNav";
 
-const getCategories = async (): Promise<Category[]> => {
+const fetchCategories = async (): Promise<Category[]> => {
     const res = await fetch("https://openapi.programming-hero.com/api/bazardor/categories");
     const data = await res.json();
     return Array.isArray(data) ? data : data.data || [];
 };
 
-const Navbar = async () => {
-    const isAuthenticated = true;
-    const activeCategory = "chal";
-    const categories = await getCategories();
+const categoriesPromise = fetchCategories();
+
+const Navbar = () => {
+    const isAuthenticated = false;
 
     return (
-        <header className="bg-base-100 border-b border-base-200">
-            <div className="navbar max-w-7xl mx-auto px-4 py-3">
+        <header className="bg-base-100 border-b border-base-200 sticky top-0 z-50">
+            <div className="navbar max-w-6xl mx-auto px-4 py-3">
                 <div className="navbar-start">
                     <Link href="/" className="flex items-center gap-3">
                         <div className="bg-success text-success-content p-2.5 rounded-xl flex items-center justify-center text-xl shadow-sm">
@@ -57,7 +58,7 @@ const Navbar = async () => {
 
                             <div
                                 tabIndex={0}
-                                className="dropdown-content mt-2 w-56 bg-base-100 rounded-box shadow-xl border border-base-200 p-2 z-50"
+                                className="dropdown-content mt-2 w-56 !bg-base-100 rounded-box shadow-xl border border-base-200 p-2 z-[100]"
                             >
                                 <div className="px-3 py-2 border-b border-base-100 mb-1">
                                     <p className="text-sm font-semibold text-base-content">রেজওয়ান আহমেদ</p>
@@ -78,12 +79,12 @@ const Navbar = async () => {
                         </div>
                     ) : (
                         <div className="flex items-center gap-3">
-                            <Link href="/signin" className="btn btn-ghost btn-sm font-medium">
+                                <Link href="/signin" className="btn btn-ghost btn-sm font-bold text-sm px-8 py-5">
                                 সাইন ইন
                             </Link>
                             <Link
                                 href="/signup"
-                                className="btn btn-success btn-sm text-success-content font-medium px-4"
+                                className="btn btn-success btn-sm text-success-content font-bold text-sm px-8 py-5"
                             >
                                 সাইন আপ
                             </Link>
@@ -92,30 +93,8 @@ const Navbar = async () => {
                 </div>
             </div>
 
-            <div className="border-t border-base-200 bg-base-100">
-                <div className="max-w-7xl mx-auto px-4 overflow-x-auto scrollbar-none">
-                    <ul className="flex items-center gap-2 py-2.5 min-w-max">
-                        {categories.map((cat) => {
-                            const isActive = activeCategory === cat.slug;
-                            return (
-                                <li key={cat.id}>
-                                    <Link
-                                        href={`/categories/${cat.slug}`}
-                                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${isActive
-                                            ? "bg-base-200 text-base-content font-semibold shadow-2xs"
-                                            : "text-base-content/70 hover:bg-base-200 hover:text-base-content"
-                                            }`}
-                                    >
-                                        <span className="text-base">{cat.icon}</span>
-                                        <span>{cat.nameBn}</span>
-                                    </Link>
-                                </li>
-                            );
-                        })}
-                    </ul>
-                </div>
-            </div>
-            <hr className="border-gray-100"/>
+            <CategoryNav categoriesPromise={categoriesPromise} />
+            <hr className="border-gray-300" />
             <PriceTicker />
         </header>
     );

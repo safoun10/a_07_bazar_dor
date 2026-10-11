@@ -10,6 +10,13 @@ export interface ProductChange {
 	pct: number;
 }
 
+export interface Category {
+	id: string;
+	slug: string;
+	nameBn: string;
+	icon: string;
+}
+
 export interface Product {
 	id: number;
 	slug: string;
