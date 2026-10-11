@@ -18,15 +18,15 @@ const CategoryNav = ({ categoriesPromise }: CategoryNavProps) => {
             <div className="max-w-6xl mx-auto px-4 overflow-x-auto scrollbar-none">
                 <ul className="flex items-center py-2.5 min-w-max">
                     {categories.map((cat) => {
-                        const isActive = pathname === `/categories/${cat.slug}` || (pathname === "/" && cat.slug === "chal");
+                        const isActive = pathname === `/categories/${cat.slug}`;
 
                         return (
                             <li key={cat.id}>
                                 <Link
                                     href={`/categories/${cat.slug}`}
                                     className={`flex font-bold items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all ${isActive
-                                            ? "bg-base-200 text-base-content shadow-2xs"
-                                            : "text-base-content/70 hover:bg-base-200 hover:text-base-content"
+                                        ? "bg-base-200 text-base-content shadow-2xs"
+                                        : "text-base-content/70 hover:bg-base-200 hover:text-base-content"
                                         }`}
                                 >
                                     <span className="text-base">{cat.icon}</span>

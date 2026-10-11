@@ -15,7 +15,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             data-theme="light"
         >
             <body>
-                <Suspense fallback="loading">
+                <Suspense fallback="navigation is otw">
                     <Navbar></Navbar>
                 </Suspense>
                 {children}

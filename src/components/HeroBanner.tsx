@@ -28,7 +28,7 @@ const HeroBanner = () => {
                     </div>
                 </div>
 
-                <div className="flex-shrink-0 w-full md:w-auto flex justify-center">
+                <div className="shrink-0 w-full md:w-auto flex justify-center">
                     <div className="relative w-64 h-56 md:w-80 md:h-64">
                         <Image
                             src="/bazar-hero.png"
