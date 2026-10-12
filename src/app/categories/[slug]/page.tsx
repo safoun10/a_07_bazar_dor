@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { getCategory, getProducts } from "@/lib/bazar";
 import SortableCategoryProducts from "@/components/SortableCategoryProducts";
 
+export const instant = false;
+
 interface CategoryPageProps {
     params: Promise<{ slug: string }>;
 }

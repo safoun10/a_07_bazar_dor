@@ -6,12 +6,14 @@ import { auth } from "@/lib/auth";
 import { getProduct } from "@/lib/bazar";
 import { formatBengaliNumber, formatUnit } from "@/lib/bazar-format";
 
+export const instant = false;
+
 interface PageProps {
     params: Promise<{ slug: string }>;
 }
 
 export default async function ProductDetailsPage({ params }: PageProps) {
-    // 1. Check Route Protection (Requires Login)
+
     const session = await auth.api.getSession({
         headers: await headers(),
     });

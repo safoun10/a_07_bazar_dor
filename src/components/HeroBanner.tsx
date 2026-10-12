@@ -1,8 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
+import { connection } from "next/server";
 import { getBangladeshDate } from "@/lib/bazar-format";
 
-const HeroBanner = () => {
+const HeroBanner = async () => {
+    await connection();
+
     return (
         <section className="max-w-6xl mx-auto px-4 my-10">
             <div className="bg-base-100 rounded-3xl border border-base-200 p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-xs">
