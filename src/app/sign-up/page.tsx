@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { signUp, signIn } from "@/lib/auth-client";
+import { authClient, signUp, signIn } from "@/lib/auth-client";
 import { FaGoogle, FaGithub, FaArrowLeft } from "react-icons/fa";
 
 const SignUpPage = () => {
@@ -46,10 +46,12 @@ const SignUpPage = () => {
             },
             {
                 onRequest: () => setLoading(true),
-                onSuccess: () => {
+                onSuccess: async () => {
+                    await authClient.getSession();
                     setLoading(false);
                     toast.success("অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে");
-                    router.push("/sign-in");
+                    router.push("/");
+                    router.refresh();
                 },
                 onError: (ctx) => {
                     setLoading(false);
