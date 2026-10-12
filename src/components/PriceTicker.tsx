@@ -1,6 +1,5 @@
 import { use, cache } from "react";
 import Marquee from "react-fast-marquee";
-import { Product } from "@/types/bazar";
 import { getProducts } from "@/lib/bazar";
 import { formatBengaliNumber, formatUnitName } from "@/lib/bazar-format";
 
@@ -30,9 +29,9 @@ const PriceTicker = () => {
                                 </span>
                                 <span
                                     className={`flex items-center gap-0.5 font-semibold ${isUp
-                                        ? "text-error"
+                                        ? "text-success"
                                         : isDown
-                                            ? "text-success"
+                                            ? "text-error"
                                             : "text-base-content/60"
                                         }`}
                                 >

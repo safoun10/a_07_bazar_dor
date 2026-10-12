@@ -13,6 +13,9 @@ interface PageProps {
 }
 
 export default async function ProductDetailsPage({ params }: PageProps) {
+    const { slug } = await params;
+    const product = await getProduct(slug);
+    if (!product) notFound();
 
     const session = await auth.api.getSession({
         headers: await headers(),
@@ -21,10 +24,6 @@ export default async function ProductDetailsPage({ params }: PageProps) {
     if (!session) {
         redirect("/sign-in?reason=protected");
     }
-
-    const { slug } = await params;
-    const product = await getProduct(slug);
-    if (!product) notFound();
 
     const markets = product.markets ?? [];
     const minPrice = markets.length > 0 ? Math.min(...markets.map((m) => m.min)) : product.today;

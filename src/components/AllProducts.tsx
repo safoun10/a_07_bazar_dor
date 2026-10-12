@@ -6,7 +6,7 @@ const AllProducts = async () => {
     const products = await getProducts();
 
     return (
-        <section id="সব-পণ্য" className="max-w-6xl mx-auto px-4 my-12 scroll-mt-40">
+        <section id="all-product" className="max-w-6xl mx-auto px-4 my-12 scroll-mt-40">
             <div className="mb-10">
                 <h2 className="text-2xl font-extrabold text-base-content tracking-tight">
                     সব পণ্য
@@ -17,16 +17,9 @@ const AllProducts = async () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {products.map((product) => {
-                    const isDecrease = product.change.dir === "down";
-                    return (
-                        <ProductCard
-                            key={product.id}
-                            product={product}
-                            isDecrease={isDecrease}
-                        />
-                    );
-                })}
+                {products.map((product) => (
+                    <ProductCard key={product.id} product={product} />
+                ))}
             </div>
         </section>
     );

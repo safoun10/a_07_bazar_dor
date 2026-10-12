@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession, signOut } from "@/lib/auth-client";
 import { toast } from "react-toastify";
@@ -11,12 +11,6 @@ const ProfilePage = () => {
     const router = useRouter();
     const { data: session, isPending } = useSession();
     const [signingOut, setSigningOut] = useState(false);
-
-    useEffect(() => {
-        if (!isPending && !session?.user) {
-            router.replace("/sign-in?reason=protected");
-        }
-    }, [isPending, router, session?.user]);
 
     if (isPending) {
         return (

@@ -15,6 +15,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <html
             lang="bn"
             data-theme="light"
+            className="scroll-smooth"
         >
             <body>
                 <Suspense fallback={<div className="h-24 animate-pulse bg-base-100" aria-label="লোড হচ্ছে" />}>

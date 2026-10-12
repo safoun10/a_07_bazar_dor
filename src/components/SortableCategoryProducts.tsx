@@ -48,7 +48,6 @@ export default function SortableCategoryProducts({ products }: SortableCategoryP
                         <ProductCard
                             key={product.id}
                             product={product}
-                            isDecrease={product.change.dir === "down"}
                         />
                     ))}
                 </div>

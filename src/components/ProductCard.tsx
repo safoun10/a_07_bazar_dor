@@ -4,11 +4,12 @@ import { formatBengaliNumber, formatUnit } from "@/lib/bazar-format";
 
 interface ProductCardProps {
     product: Product;
-    isDecrease?: boolean;
 }
 
-const ProductCard = ({ product, isDecrease = false }: ProductCardProps) => {
-    const isNeutral = product.change.dir === "neutral" || product.change.pct === 0;
+const ProductCard = ({ product }: ProductCardProps) => {
+    const isUp = product.change.dir === "up";
+    const isDown = product.change.dir === "down";
+    const isNeutral = !isUp && !isDown;
 
     return (
         <Link href={`/product/${product.id}`} className="block group">
@@ -41,11 +42,11 @@ const ProductCard = ({ product, isDecrease = false }: ProductCardProps) => {
 
                     <div className={`flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-full border ${isNeutral
                         ? "bg-base-200 text-base-content/70 border-base-300"
-                        : isDecrease
+                        : isUp
                             ? "bg-emerald-50 text-success border-emerald-100"
                             : "bg-red-50 text-error border-red-100"
                         }`}>
-                        <span>{isNeutral ? "—" : isDecrease ? "▼" : "▲"}</span>
+                        <span>{isNeutral ? "—" : isUp ? "▲" : "▼"}</span>
                         <span>{formatBengaliNumber(Math.abs(product.change.pct))}%</span>
                     </div>
                 </div>

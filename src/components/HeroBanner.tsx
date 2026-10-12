@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { connection } from "next/server";
 import { getBangladeshDate } from "@/lib/bazar-format";
 
@@ -23,12 +22,12 @@ const HeroBanner = async () => {
                     </p>
 
                     <div className="pt-10">
-                        <Link
-                            href="#সব-পণ্য"
+                        <a
+                            href="#all-product"
                             className="btn btn-success text-white font-bold px-6 shadow-md hover:bg-emerald-700 transition-all rounded-xl"
                         >
                             সব পণ্য দেখুন
-                        </Link>
+                        </a>
                     </div>
                 </div>
 
