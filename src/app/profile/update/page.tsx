@@ -11,7 +11,6 @@ const UpdateProfilePage = () => {
     const router = useRouter();
     const { data: session, isPending, refetch } = useSession();
 
-    // Lazy initial state based on session name
     const [name, setName] = useState<string | null>(null);
     const [updating, setUpdating] = useState(false);
 

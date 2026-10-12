@@ -24,6 +24,6 @@
 1. Install dependencies with `npm install`.
 2. Configure the Better Auth and MongoDB environment variables used by `src/lib/auth.ts` in `.env.local`.
 3. Start the development server with `npm run dev`.
-4. Open [http://localhost:3000](http://localhost:3000).
+4. Open [https://bazar-dor-safoun.vercel.app/](https://bazar-dor-safoun.vercel.app/).
 
 Run `npm run lint` and `npm run build` to check the application.

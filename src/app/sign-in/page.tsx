@@ -39,10 +39,10 @@ const SignInPage = () => {
                     setLoading(false);
                     toast.success("সফল হয়েছে");
 
-                    // 1. Force Better Auth to re-query the session endpoint and update client state
+
                     await authClient.getSession();
 
-                    // 2. Then navigate and refresh
+
                     router.push("/");
                     router.refresh();
                 },
