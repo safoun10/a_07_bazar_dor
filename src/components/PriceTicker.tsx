@@ -1,15 +1,13 @@
 import { use, cache } from "react";
 import Marquee from "react-fast-marquee";
 import { Product } from "@/types/bazar";
+import { getProducts } from "@/lib/bazar";
+import { formatBengaliNumber, formatUnitName } from "@/lib/bazar-format";
 
-const getProducts = cache(async (): Promise<Product[]> => {
-    const res = await fetch("https://openapi.programming-hero.com/api/bazardor/products");
-    const data = await res.json();
-    return Array.isArray(data) ? data : data.data || [];
-});
+const getTickerProducts = cache(getProducts);
 
 const PriceTicker = () => {
-    const products = use(getProducts());
+    const products = use(getTickerProducts());
 
     if (products.length === 0) return null;
 
@@ -19,6 +17,7 @@ const PriceTicker = () => {
                 <div className="flex items-center gap-4">
                     {products.map((item) => {
                         const isUp = item.change.dir === "up";
+                        const isDown = item.change.dir === "down";
                         return (
                             <div
                                 key={item.id}
@@ -27,13 +26,17 @@ const PriceTicker = () => {
                                 <span>{item.image || item.categoryIcon}</span>
                                 <span className="font-medium text-base-content">{item.nameBn}</span>
                                 <span className="font-bold text-base-content">
-                                    {item.today} টাকা/কেজি
+                                    {formatBengaliNumber(item.today)} টাকা/{formatUnitName(item.unit)}
                                 </span>
                                 <span
-                                    className={`flex items-center gap-0.5 font-semibold ${isUp ? "text-error" : "text-success"
+                                    className={`flex items-center gap-0.5 font-semibold ${isUp
+                                        ? "text-error"
+                                        : isDown
+                                            ? "text-success"
+                                            : "text-base-content/60"
                                         }`}
                                 >
-                                    {isUp ? "▲" : "▼"} {item.change.pct}%
+                                    {isUp ? "▲" : isDown ? "▼" : "—"} {formatBengaliNumber(Math.abs(item.change.pct))}%
                                 </span>
                             </div>
                         );

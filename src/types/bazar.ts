@@ -6,15 +6,8 @@ export interface Category {
 }
 
 export interface ProductChange {
-	dir: "up" | "down" | "neutral";
+	dir: "up" | "down" | "flat" | "neutral";
 	pct: number;
-}
-
-export interface Category {
-	id: string;
-	slug: string;
-	nameBn: string;
-	icon: string;
 }
 
 export interface Product {

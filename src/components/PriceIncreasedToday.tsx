@@ -1,14 +1,8 @@
-import { Product } from "@/types/bazar";
 import ProductCard from "./ProductCard";
-
-const fetchAllProducts = async (): Promise<Product[]> => {
-    const res = await fetch("https://openapi.programming-hero.com/api/bazardor/products");
-    const data = await res.json();
-    return Array.isArray(data) ? data : data.data || [];
-};
+import { getProducts } from "@/lib/bazar";
 
 const PriceIncreasedToday = async () => {
-    const products = await fetchAllProducts();
+    const products = await getProducts();
 
     const topIncreasedProducts = products
         .filter((item) => item.change.dir === "up" && item.change.pct > 0)

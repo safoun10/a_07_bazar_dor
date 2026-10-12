@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useSession, authClient } from "@/lib/auth-client";
@@ -15,6 +15,12 @@ const UpdateProfilePage = () => {
     const [name, setName] = useState<string | null>(null);
     const [updating, setUpdating] = useState(false);
 
+    useEffect(() => {
+        if (!isPending && !session?.user) {
+            router.replace("/sign-in?reason=protected");
+        }
+    }, [isPending, router, session?.user]);
+
     if (isPending) {
         return (
             <div className="min-h-[calc(100vh-140px)] flex items-center justify-center bg-base-200/30">
@@ -23,10 +29,7 @@ const UpdateProfilePage = () => {
         );
     }
 
-    if (!session?.user) {
-        router.push("/sign-in");
-        return null;
-    }
+    if (!session?.user) return null;
 
     const currentName = name !== null ? name : session.user.name || "";
 

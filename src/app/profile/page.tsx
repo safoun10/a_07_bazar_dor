@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession, signOut } from "@/lib/auth-client";
 import { toast } from "react-toastify";
@@ -9,6 +10,13 @@ import { toast } from "react-toastify";
 const ProfilePage = () => {
     const router = useRouter();
     const { data: session, isPending } = useSession();
+    const [signingOut, setSigningOut] = useState(false);
+
+    useEffect(() => {
+        if (!isPending && !session?.user) {
+            router.replace("/sign-in?reason=protected");
+        }
+    }, [isPending, router, session?.user]);
 
     if (isPending) {
         return (
@@ -18,21 +26,28 @@ const ProfilePage = () => {
         );
     }
 
-    if (!session?.user) {
-        router.push("/sign-in");
-        return null;
-    }
+    if (!session?.user) return null;
 
     const handleSignOut = async () => {
-        await signOut({
-            fetchOptions: {
-                onSuccess: () => {
-                    toast.success("সাইন আউট সফল হয়েছে");
-                    router.push("/");
-                    router.refresh();
+        setSigningOut(true);
+        try {
+            await signOut({
+                fetchOptions: {
+                    onSuccess: () => {
+                        toast.success("সাইন আউট সফল হয়েছে");
+                        router.push("/");
+                        router.refresh();
+                    },
+                    onError: (ctx) => {
+                        toast.error(ctx.error.message || "সাইন আউট করা যায়নি");
+                    },
                 },
-            },
-        });
+            });
+        } catch (error) {
+            toast.error(error instanceof Error ? error.message : "সাইন আউট করা যায়নি");
+        } finally {
+            setSigningOut(false);
+        }
     };
 
     return (
@@ -81,9 +96,14 @@ const ProfilePage = () => {
 
                         <button
                             onClick={handleSignOut}
+                            disabled={signingOut}
                             className="btn btn-outline btn-error btn-sm font-semibold rounded-xl px-4 h-10"
                         >
-                            সাইন আউট
+                            {signingOut ? (
+                                <span className="loading loading-spinner loading-xs"></span>
+                            ) : (
+                                "সাইন আউট"
+                            )}
                         </button>
                     </div>
                 </div>

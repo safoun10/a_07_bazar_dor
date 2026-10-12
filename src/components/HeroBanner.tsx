@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { getBangladeshDate } from "@/lib/bazar-format";
 
 const HeroBanner = () => {
     return (
@@ -7,7 +8,7 @@ const HeroBanner = () => {
             <div className="bg-base-100 rounded-3xl border border-base-200 p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-xs">
                 <div className="flex-1 space-y-4">
                     <div className="inline-block bg-emerald-100 text-emerald-800 text-xs font-bold px-4 py-1 rounded-full">
-                        রবিবার, ১১ অক্টোবর, ২০২৬
+                        {getBangladeshDate()}
                     </div>
 
                     <h1 className="text-3xl md:text-4xl font-extrabold text-base-content tracking-tight">
@@ -20,7 +21,7 @@ const HeroBanner = () => {
 
                     <div className="pt-10">
                         <Link
-                            href="#all-products"
+                            href="#সব-পণ্য"
                             className="btn btn-success text-white font-bold px-6 shadow-md hover:bg-emerald-700 transition-all rounded-xl"
                         >
                             সব পণ্য দেখুন

@@ -1,18 +1,15 @@
 import Link from "next/link";
-import { Category } from "@/types/bazar";
+import { connection } from "next/server";
 import PriceTicker from "./PriceTicker";
 import CategoryNav from "./CategoryNav";
-import UserNav from "./UserNav"; // Import the client component
+import UserNav from "./UserNav";
+import { getCategories } from "@/lib/bazar";
+import { getBangladeshDate } from "@/lib/bazar-format";
 
-const fetchCategories = async (): Promise<Category[]> => {
-    const res = await fetch("https://openapi.programming-hero.com/api/bazardor/categories");
-    const data = await res.json();
-    return Array.isArray(data) ? data : data.data || [];
-};
+const Navbar = async () => {
+    await connection();
+    const categoriesPromise = getCategories();
 
-const categoriesPromise = fetchCategories();
-
-const Navbar = () => {
     return (
         <>
             <header className="bg-base-100 border-b border-base-200 sticky top-0 z-100 shadow-xs">
@@ -27,7 +24,7 @@ const Navbar = () => {
                                     বাজার দর
                                 </span>
                                 <span className="text-[11px] md:text-xs text-base-content/60 mt-1 block truncate">
-                                    রবিবার, ১১ অক্টোবর, ২০২৬
+                                    {getBangladeshDate()}
                                 </span>
                             </div>
                         </Link>

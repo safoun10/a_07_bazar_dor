@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { signUp, signIn, authClient } from "@/lib/auth-client";
+import { signUp, signIn } from "@/lib/auth-client";
 import { FaGoogle, FaGithub, FaArrowLeft } from "react-icons/fa";
 
 const SignUpPage = () => {
@@ -17,6 +17,7 @@ const SignUpPage = () => {
     });
 
     const [loading, setLoading] = useState(false);
+    const [socialLoading, setSocialLoading] = useState<"google" | "github" | null>(null);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -45,16 +46,10 @@ const SignUpPage = () => {
             },
             {
                 onRequest: () => setLoading(true),
-                onSuccess: async () => {
+                onSuccess: () => {
                     setLoading(false);
                     toast.success("অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে");
-
-                    // 1. Force Better Auth to re-query the session endpoint and update client state
-                    await authClient.getSession();
-
-                    // 2. Then navigate and refresh
-                    router.push("/");
-                    router.refresh();
+                    router.push("/sign-in");
                 },
                 onError: (ctx) => {
                     setLoading(false);
@@ -65,10 +60,24 @@ const SignUpPage = () => {
     };
 
     const handleSocialSignIn = async (provider: "google" | "github") => {
-        await signIn.social({
-            provider,
-            callbackURL: "/",
-        });
+        setSocialLoading(provider);
+        try {
+            await signIn.social(
+                {
+                    provider,
+                    callbackURL: "/",
+                },
+                {
+                    onError: (ctx) => {
+                        toast.error(ctx.error.message || `${provider} দিয়ে সাইন ইন করা যায়নি`);
+                    },
+                }
+            );
+        } catch (error) {
+            toast.error(error instanceof Error ? error.message : `${provider} দিয়ে সাইন ইন করা যায়নি`);
+        } finally {
+            setSocialLoading(null);
+        }
     };
 
     return (
@@ -163,19 +172,21 @@ const SignUpPage = () => {
                     <button
                         type="button"
                         onClick={() => handleSocialSignIn("google")}
+                        disabled={loading || socialLoading !== null}
                         className="btn btn-outline border-base-300 hover:bg-base-200 hover:border-base-300 text-base-content text-xs font-semibold rounded-xl flex items-center justify-center gap-2 h-11"
                     >
-                        <FaGoogle className="text-4285F4 w-4 h-4" />
-                        Google দিয়ে চালিয়ে যান
+                        {socialLoading === "google" ? <span className="loading loading-spinner loading-xs" /> : <FaGoogle className="text-4285F4 w-4 h-4" />}
+                        {socialLoading === "google" ? "Google-এ সংযোগ হচ্ছে" : "Google দিয়ে চালিয়ে যান"}
                     </button>
 
                     <button
                         type="button"
                         onClick={() => handleSocialSignIn("github")}
+                        disabled={loading || socialLoading !== null}
                         className="btn btn-outline border-base-300 hover:bg-base-200 hover:border-base-300 text-base-content text-xs font-semibold rounded-xl flex items-center justify-center gap-2 h-11"
                     >
-                        <FaGithub className="w-4 h-4" />
-                        GitHub দিয়ে চালিয়ে যান
+                        {socialLoading === "github" ? <span className="loading loading-spinner loading-xs" /> : <FaGithub className="w-4 h-4" />}
+                        {socialLoading === "github" ? "GitHub-এ সংযোগ হচ্ছে" : "GitHub দিয়ে চালিয়ে যান"}
                     </button>
                 </div>
 

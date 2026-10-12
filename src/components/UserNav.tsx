@@ -2,22 +2,36 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession, signOut } from "@/lib/auth-client";
+import { toast } from "react-toastify";
 
 const UserNav = () => {
     const router = useRouter();
     const { data: session, isPending } = useSession();
+    const [signingOut, setSigningOut] = useState(false);
 
     const handleSignOut = async () => {
-        await signOut({
-            fetchOptions: {
-                onSuccess: () => {
-                    router.push("/");
-                    router.refresh();
+        setSigningOut(true);
+        try {
+            await signOut({
+                fetchOptions: {
+                    onSuccess: () => {
+                        toast.success("সাইন আউট সফল হয়েছে");
+                        router.push("/");
+                        router.refresh();
+                    },
+                    onError: (ctx) => {
+                        toast.error(ctx.error.message || "সাইন আউট করা যায়নি");
+                    },
                 },
-            },
-        });
+            });
+        } catch (error) {
+            toast.error(error instanceof Error ? error.message : "সাইন আউট করা যায়নি");
+        } finally {
+            setSigningOut(false);
+        }
     };
 
     if (isPending) {
@@ -67,9 +81,11 @@ const UserNav = () => {
                     </Link>
                     <button
                         onClick={handleSignOut}
+                        disabled={signingOut}
                         className="w-full flex items-center gap-2 px-3 py-2 text-sm text-error hover:bg-error/10 rounded-lg transition-colors mt-1"
                     >
-                        ↩ সাইন আউট
+                        {signingOut ? <span className="loading loading-spinner loading-xs" /> : "↩"}
+                        {signingOut ? "সাইন আউট হচ্ছে" : "সাইন আউট"}
                     </button>
                 </div>
             </div>

@@ -1,29 +1,10 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { FaArrowLeft, FaStore } from "react-icons/fa";
-import { Product } from "@/types/bazar";
-import { auth } from "@/lib/auth"; // Adjust based on your better-auth server configuration path
-
-const fetchProductById = async (slug: string): Promise<Product | null> => {
-    try {
-        const res = await fetch(`https://openapi.programming-hero.com/api/bazardor/products/${slug}`);
-        const data = await res.json();
-        return data || null;
-    } catch {
-        return null;
-    }
-};
-
-const formatUnit = (unit: string) => {
-    switch (unit?.toLowerCase()) {
-        case "kg": return "প্রতি কেজি";
-        case "liter": return "প্রতি লিটার";
-        case "dozen": return "প্রতি ডজন";
-        case "piece": return "প্রতি পিস";
-        default: return `প্রতি ${unit || "কেজি"}`;
-    }
-};
+import { auth } from "@/lib/auth";
+import { getProduct } from "@/lib/bazar";
+import { formatBengaliNumber, formatUnit } from "@/lib/bazar-format";
 
 interface PageProps {
     params: Promise<{ slug: string }>;
@@ -36,22 +17,12 @@ export default async function ProductDetailsPage({ params }: PageProps) {
     });
 
     if (!session) {
-        redirect("/sign-in");
+        redirect("/sign-in?reason=protected");
     }
 
     const { slug } = await params;
-    const product = await fetchProductById(slug);
-
-    if (!product) {
-        return (
-            <main className="min-h-[calc(100vh-140px)] bg-base-200/30 p-10 text-center flex flex-col items-center justify-center">
-                <h2 className="text-xl font-bold mb-4">পণ্যটি পাওয়া যায়নি</h2>
-                <Link href="/" className="btn btn-outline btn-sm">
-                    <FaArrowLeft className="mr-1" /> হোম পেজে ফিরে যান
-                </Link>
-            </main>
-        );
-    }
+    const product = await getProduct(slug);
+    if (!product) notFound();
 
     const markets = product.markets ?? [];
     const minPrice = markets.length > 0 ? Math.min(...markets.map((m) => m.min)) : product.today;
@@ -105,7 +76,7 @@ export default async function ProductDetailsPage({ params }: PageProps) {
                             সর্বনিম্ন দাম (Minimum Price)
                         </p>
                         <p className="text-2xl sm:text-3xl font-black text-emerald-600 mt-2">
-                            ৳ {minPrice}
+                            ৳ {formatBengaliNumber(minPrice)}
                         </p>
                         <p className="text-xs text-base-content/50 mt-1">{formatUnit(product.unit)}</p>
                     </div>
@@ -115,7 +86,7 @@ export default async function ProductDetailsPage({ params }: PageProps) {
                             গড় দাম (Average Price)
                         </p>
                         <p className="text-2xl sm:text-3xl font-black text-primary mt-2">
-                            ৳ {avgPrice}
+                            ৳ {formatBengaliNumber(avgPrice)}
                         </p>
                         <p className="text-xs text-base-content/50 mt-1">{formatUnit(product.unit)}</p>
                     </div>
@@ -125,7 +96,7 @@ export default async function ProductDetailsPage({ params }: PageProps) {
                             সর্বোচ্চ দাম (Maximum Price)
                         </p>
                         <p className="text-2xl sm:text-3xl font-black text-error mt-2">
-                            ৳ {maxPrice}
+                            ৳ {formatBengaliNumber(maxPrice)}
                         </p>
                         <p className="text-xs text-base-content/50 mt-1">{formatUnit(product.unit)}</p>
                     </div>
@@ -160,7 +131,7 @@ export default async function ProductDetailsPage({ params }: PageProps) {
                                                 <span className="badge badge-ghost badge-sm">{m.division}</span>
                                             </td>
                                             <td className="text-right font-bold text-base-content">
-                                                ৳ {m.min} - ৳ {m.max}
+                                                ৳ {formatBengaliNumber(m.min)} - ৳ {formatBengaliNumber(m.max)}
                                             </td>
                                         </tr>
                                     ))

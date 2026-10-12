@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -12,6 +12,17 @@ const SignInPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
+    const [socialLoading, setSocialLoading] = useState<"google" | "github" | null>(null);
+
+    useEffect(() => {
+        const query = new URLSearchParams(window.location.search);
+        if (query.get("reason") === "protected") {
+            toast.info("এই পৃষ্ঠাটি দেখতে সাইন ইন করুন");
+            query.delete("reason");
+            const search = query.toString();
+            window.history.replaceState(null, "", `${window.location.pathname}${search ? `?${search}` : ""}`);
+        }
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -24,12 +35,6 @@ const SignInPage = () => {
             },
             {
                 onRequest: () => setLoading(true),
-                // onSuccess: () => {
-                //     setLoading(false);
-                //     toast.success("সাইন ইন সফল হয়েছে");
-                //     router.push("/");
-                //     router.refresh(); // Crucial to update Navbar session state instantly
-                // },
                 onSuccess: async () => {
                     setLoading(false);
                     toast.success("সফল হয়েছে");
@@ -50,10 +55,24 @@ const SignInPage = () => {
     };
 
     const handleSocialSignIn = async (provider: "google" | "github") => {
-        await signIn.social({
-            provider,
-            callbackURL: "/",
-        });
+        setSocialLoading(provider);
+        try {
+            await signIn.social(
+                {
+                    provider,
+                    callbackURL: "/",
+                },
+                {
+                    onError: (ctx) => {
+                        toast.error(ctx.error.message || `${provider} দিয়ে সাইন ইন করা যায়নি`);
+                    },
+                }
+            );
+        } catch (error) {
+            toast.error(error instanceof Error ? error.message : `${provider} দিয়ে সাইন ইন করা যায়নি`);
+        } finally {
+            setSocialLoading(null);
+        }
     };
 
     return (
@@ -116,19 +135,21 @@ const SignInPage = () => {
                     <button
                         type="button"
                         onClick={() => handleSocialSignIn("google")}
+                        disabled={loading || socialLoading !== null}
                         className="btn btn-outline border-base-300 hover:bg-base-200 hover:border-base-300 text-base-content text-xs font-semibold rounded-xl flex items-center justify-center gap-2 h-11"
                     >
-                        <FaGoogle className="text-4285F4 w-4 h-4" />
-                        Google দিয়ে চালিয়ে যান
+                        {socialLoading === "google" ? <span className="loading loading-spinner loading-xs" /> : <FaGoogle className="text-4285F4 w-4 h-4" />}
+                        {socialLoading === "google" ? "Google-এ সংযোগ হচ্ছে" : "Google দিয়ে চালিয়ে যান"}
                     </button>
 
                     <button
                         type="button"
                         onClick={() => handleSocialSignIn("github")}
+                        disabled={loading || socialLoading !== null}
                         className="btn btn-outline border-base-300 hover:bg-base-200 hover:border-base-300 text-base-content text-xs font-semibold rounded-xl flex items-center justify-center gap-2 h-11"
                     >
-                        <FaGithub className="w-4 h-4" />
-                        GitHub দিয়ে চালিয়ে যান
+                        {socialLoading === "github" ? <span className="loading loading-spinner loading-xs" /> : <FaGithub className="w-4 h-4" />}
+                        {socialLoading === "github" ? "GitHub-এ সংযোগ হচ্ছে" : "GitHub দিয়ে চালিয়ে যান"}
                     </button>
                 </div>
 
