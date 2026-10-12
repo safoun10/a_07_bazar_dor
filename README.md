@@ -1,6 +1,8 @@
 # বাজার দর (Bazar Dor)
 
 বাংলাদেশের নিত্যপ্রয়োজনীয় পণ্যের আজকের দাম, বাজারভিত্তিক দর এবং দৈনিক মূল্য পরিবর্তন দেখার responsive ওয়েব অ্যাপ।
+</br>
+[https://bazar-dor-safoun.vercel.app/](https://bazar-dor-safoun.vercel.app/)
 
 ## Technologies
 
